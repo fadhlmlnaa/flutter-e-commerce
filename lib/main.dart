@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mylearningflutter/src/screens/beranda.dart';
 import 'package:mylearningflutter/src/widgets/homepage.dart';
 
 void main() {
@@ -12,7 +13,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+        scaffoldBackgroundColor: Colors.white,
         useMaterial3: true,
         fontFamily: 'Poppins',
       ),

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:heroicons/heroicons.dart';
 import 'package:mylearningflutter/src/screens/beranda.dart';
 import 'package:mylearningflutter/src/screens/cart_page.dart';
 import 'package:mylearningflutter/src/screens/favorite_page.dart';
-import 'package:mylearningflutter/src/screens/profile_page.dart';
+import 'package:mylearningflutter/src/constant/product.dart';
 
 class THomePage extends StatefulWidget {
   const THomePage({super.key});
@@ -17,27 +16,41 @@ class _THomePageState extends State<THomePage> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
 
-  final List<Widget> _pages = [
-    const BerandaPage(),
-    const CartPage(),
-    const FavoritePage(),
-    const ProfilePage(),
-  ];
+  List<Product> cartProducts = [];
+  List<Product> favoriteProducts = [];
 
-  final List<String> _pageTitles = [
-    'Home',
-    'Cart',
-    'Favorite',
-    'Profile',
-  ];
+  void addToCart(Product product) {
+    setState(() {
+      cartProducts.add(product);
+    });
+  }
+
+  void addToFavorite(Product product) {
+    setState(() {
+      favoriteProducts.add(product);
+    });
+  }
+
+  void removeFromCart(Product product) {
+    setState(() {
+      cartProducts.remove(product);
+    });
+  }
+
+  void removeFromFavorite(Product product) {
+    setState(() {
+      favoriteProducts.remove(product);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text(_pageTitles[_selectedIndex])),
+        backgroundColor: Colors.white,
+        title:
+            Center(child: Text(['Home', 'Cart', 'Favorite'][_selectedIndex])),
       ),
-
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -45,14 +58,29 @@ class _THomePageState extends State<THomePage> {
             _selectedIndex = index;
           });
         },
-        children: _pages,
+        children: [
+          BerandaPage(
+            addToCart: addToCart,
+            addToFavorite: addToFavorite,
+            cartProducts: cartProducts,
+            favoriteProducts: favoriteProducts,
+          ),
+          CartPage(
+            cartProducts: cartProducts,
+            removeFromCart: removeFromCart,
+          ),
+          FavoritePage(
+            favoriteProducts: favoriteProducts,
+            removeFromFavorite: removeFromFavorite,
+          ),
+        ],
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
         child: GNav(
-          tabBackgroundColor: Color(0xFFFF660E),
+          tabBackgroundColor: const Color(0xFFFF660E),
           activeColor: Colors.white,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           gap: 8,
           selectedIndex: _selectedIndex,
           onTabChange: (index) {
@@ -73,10 +101,6 @@ class _THomePageState extends State<THomePage> {
             GButton(
               icon: Icons.favorite,
               text: 'Favorite',
-            ),
-            GButton(
-              icon: Icons.account_circle_rounded,
-              text: 'Profile',
             ),
           ],
         ),
